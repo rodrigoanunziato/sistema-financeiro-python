@@ -1,22 +1,21 @@
 
 /* ========================================
-   1. CORES PADRÃO DO SISTEMA
+   1. VARIÁVEIS
 ======================================== */
 
 :root {
     --cor-primaria: #0866cc;
     --cor-secundaria: #0755aa;
-
     --azul-marinho: #17365f;
     --azul-escuro: #102b4e;
-
     --texto: #1d2b42;
     --texto-secundario: #718096;
     --borda: #d9e1ec;
     --fundo: #f2f6fc;
     --branco: #ffffff;
+    --sombra-card: 0 15px 45px rgba(23, 54, 95, 0.11);
+    --transicao: 0.25s ease;
 }
-
 
 /* ========================================
    2. CONFIGURAÇÕES GERAIS
@@ -26,6 +25,10 @@
     box-sizing: border-box;
 }
 
+html {
+    min-height: 100%;
+}
+
 body {
     margin: 0;
     min-height: 100vh;
@@ -33,139 +36,131 @@ body {
     font-size: 14px;
     color: var(--texto);
     background:
-        radial-gradient(
-            circle at top left,
-            #e3efff 0,
-            transparent 40%
-        ),
+        radial-gradient(circle at top left, #e3efff 0, transparent 40%),
+        radial-gradient(circle at bottom right, #e8f0fc 0, transparent 35%),
         var(--fundo);
 }
 
-
 /* ========================================
-   3. CONTAINER DO LOGIN
+   3. CONTAINER E CARTÃO
 ======================================== */
 
 .login-container {
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 30px 20px;
 }
 
-
-/* ========================================
-   4. CARTÃO DE LOGIN
-======================================== */
-
 .login-card {
     width: 100%;
     max-width: 420px;
     overflow: hidden;
-    background-color: var(--branco);
+    background: var(--branco);
     border-radius: 14px;
-    box-shadow: 0 12px 40px rgba(23, 54, 95, 0.12);
+    box-shadow: var(--sombra-card);
+    animation: aparecerLogin 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+    transition: box-shadow var(--transicao);
 }
 
+.login-card:hover {
+    box-shadow: 0 18px 55px rgba(23, 54, 95, 0.14);
+}
 
 /* ========================================
-   5. CABEÇALHO
+   4. CABEÇALHO E LOGO
 ======================================== */
 
 .login-header {
-    padding: 30px 24px 28px;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 24px;
     color: var(--branco);
-    background: linear-gradient(
-        135deg,
-        var(--azul-marinho),
-        var(--azul-escuro)
-    );
+    background:
+        radial-gradient(ellipse at 50% -40%, rgba(80, 137, 205, 0.22), transparent 75%),
+        linear-gradient(135deg, var(--azul-marinho), var(--azul-escuro));
 }
 
 .logo {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 58px;
-    height: 58px;
-    margin: 0 auto 14px;
-    border-radius: 50%;
-    background-color: var(--branco);
+    width: 100%;
 }
 
-.logo i {
-    font-size: 28px;
-    color: var(--cor-primaria);
+.logo img {
+    display: block;
+    width: 250px;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
 }
-
-.login-header h1 {
-    margin: 0;
-    font-size: 24px;
-    font-weight: 700;
-}
-
-.login-header p {
-    margin: 8px 0 0;
-    font-size: 13px;
-    color: #dce8f7;
-}
-
 
 /* ========================================
-   6. CORPO DO LOGIN
+   5. CORPO DO LOGIN
 ======================================== */
 
 .login-body {
-    padding: 32px 32px 30px;
+    padding: 30px 32px 24px;
 }
-
-
-/* ========================================
-   7. CAMPOS DO FORMULÁRIO
-======================================== */
 
 .form-group {
-    margin-bottom: 24px;
+    margin-bottom: 23px;
 }
 
+/* ========================================
+   6. CAMPOS DO FORMULÁRIO
+======================================== */
+
 .form-label {
-    display: block;
-    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 9px;
     color: var(--texto);
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
+}
+
+.form-label i {
+    color: var(--azul-marinho);
+    font-size: 14px;
 }
 
 .form-control {
     width: 100%;
     min-height: 46px;
-    padding: 10px 13px;
+    padding: 11px 13px;
     border: 1px solid var(--borda);
     border-radius: 7px;
-    background-color: var(--branco);
+    background: var(--branco);
     color: var(--texto);
     font-family: inherit;
-    font-size: 14px;
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
+    font-size: 13px;
+    box-shadow: none;
+    transition: border-color var(--transicao), box-shadow var(--transicao);
 }
 
 .form-control::placeholder {
     color: #9aa7b8;
 }
 
+.form-control:hover:not(:focus) {
+    border-color: #aebfd5;
+}
+
 .form-control:focus {
     border-color: var(--cor-primaria);
     outline: none;
-    box-shadow: 0 0 0 3px rgba(8, 102, 204, 0.12);
+    box-shadow: 0 0 0 3px rgba(8, 102, 204, 0.12),
+                0 2px 8px rgba(8, 102, 204, 0.05);
 }
 
-
 /* ========================================
-   8. CAMPO DE SENHA
+   7. CAMPO DE SENHA
 ======================================== */
 
 .password-container {
@@ -179,48 +174,53 @@ body {
 .password-toggle {
     position: absolute;
     top: 50%;
-    right: 10px;
+    right: 9px;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     padding: 0;
     transform: translateY(-50%);
     border: none;
+    border-radius: 5px;
     background: transparent;
-    color: var(--cor-primaria);
+    color: var(--texto-secundario);
     cursor: pointer;
-    transition: color 0.2s ease;
+    transition: color var(--transicao), background-color var(--transicao);
 }
 
 .password-toggle:hover {
-    color: var(--cor-secundaria);
+    color: var(--cor-primaria);
+    background: #f0f6ff;
+}
+
+.password-toggle:focus-visible {
+    outline: 2px solid var(--cor-primaria);
+    outline-offset: 2px;
 }
 
 .password-toggle i {
     font-size: 17px;
 }
 
-
 /* ========================================
-   9. LEMBRAR-ME E ESQUECI A SENHA
+   8. OPÇÕES DO LOGIN
 ======================================== */
 
 .login-options {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
-    gap: 8px;
-    margin-top: -10px;
-    margin-bottom: 26px;
+    gap: 10px;
+    margin-top: -7px;
+    margin-bottom: 25px;
 }
 
 .remember-option {
     display: flex;
     align-items: center;
-    gap: 6px;
-    margin-top: 8px;
+    gap: 7px;
 }
 
 .remember-checkbox {
@@ -239,14 +239,12 @@ body {
 }
 
 .forgot-password {
-    margin-left: auto;
-    padding-top: 8px;
     color: var(--cor-primaria);
     font-size: 12px;
     text-align: right;
     text-decoration: none;
     white-space: nowrap;
-    transition: color 0.2s ease;
+    transition: color var(--transicao);
 }
 
 .forgot-password:hover {
@@ -254,9 +252,8 @@ body {
     text-decoration: underline;
 }
 
-
 /* ========================================
-   10. BOTÃO DE LOGIN
+   9. BOTÃO ENTRAR
 ======================================== */
 
 .btn-login {
@@ -268,48 +265,125 @@ body {
     padding: 12px 16px;
     border: 1px solid var(--cor-primaria);
     border-radius: 7px;
-    background-color: var(--cor-primaria);
+    background: var(--cor-primaria);
     color: var(--branco);
     font-family: inherit;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    transition:
-        background-color 0.2s ease,
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
+    transition: background-color var(--transicao),
+                border-color var(--transicao),
+                box-shadow var(--transicao),
+                transform var(--transicao);
+    box-shadow: 0 3px 8px rgba(8, 102, 204, 0.13);
 }
 
 .btn-login:hover {
+    background: var(--cor-secundaria);
     border-color: var(--cor-secundaria);
-    background-color: var(--cor-secundaria);
     color: var(--branco);
-}
-
-.btn-login:focus-visible {
-    outline: 3px solid var(--cor-secundaria);
-    outline-offset: 3px;
+    box-shadow: 0 6px 16px rgba(8, 102, 204, 0.23);
+    transform: translateY(-2px);
 }
 
 .btn-login:active {
-    background-color: var(--cor-secundaria);
-    border-color: var(--cor-secundaria);
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(8, 102, 204, 0.15);
 }
 
+.btn-login:focus-visible {
+    outline: 3px solid rgba(8, 102, 204, 0.22);
+    outline-offset: 3px;
+}
+
+.btn-login:disabled,
+.btn-login.loading {
+    opacity: 0.85;
+    cursor: wait;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-login i {
+    font-size: 14px;
+}
+
+.button-content,
+.button-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.button-loading {
+    display: none;
+}
+
+.btn-login.loading .button-content {
+    display: none;
+}
+
+.btn-login.loading .button-loading {
+    display: flex;
+}
+
+/* ========================================
+   10. RODAPÉ E IDENTIFICAÇÃO
+======================================== */
+
+.login-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    margin-top: 24px;
+    padding-top: 17px;
+    border-top: 1px solid #edf1f6;
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+.login-footer i {
+    color: #6d8caf;
+    font-size: 13px;
+}
+
+.system-version {
+    margin-top: 20px;
+    color: #94a3b8;
+    font-size: 11px;
+    letter-spacing: 0.3px;
+}
 
 /* ========================================
    11. MENSAGENS DO FLASK
 ======================================== */
 
 .alert {
-    margin-bottom: 20px;
+    margin-bottom: 22px;
     border-radius: 7px;
     font-size: 13px;
+    animation: aparecerLogin 0.3s ease both;
 }
 
+/* ========================================
+   12. ANIMAÇÃO
+======================================== */
+
+@keyframes aparecerLogin {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
 /* ========================================
-   12. RESPONSIVIDADE
+   13. RESPONSIVIDADE
 ======================================== */
 
 @media (max-width: 480px) {
@@ -317,29 +391,24 @@ body {
         padding: 20px 14px;
     }
 
+    .login-card {
+        max-width: 100%;
+    }
+
     .login-header {
-        padding: 26px 18px 24px;
+        padding: 27px 20px;
     }
 
-    .logo {
-        width: 52px;
-        height: 52px;
-    }
-
-    .logo i {
-        font-size: 25px;
-    }
-
-    .login-header h1 {
-        font-size: 22px;
+    .logo img {
+        width: 230px;
     }
 
     .login-body {
-        padding: 26px 22px 24px;
+        padding: 26px 22px 22px;
     }
 
     .login-options {
-        gap: 6px;
+        gap: 8px;
     }
 
     .remember-option label,
@@ -350,15 +419,15 @@ body {
 
 @media (max-width: 350px) {
     .login-body {
-        padding: 22px 15px 20px;
+        padding: 22px 16px 20px;
     }
 
-    .login-header h1 {
-        font-size: 20px;
+    .logo img {
+        width: 205px;
     }
 
     .login-options {
-        gap: 4px;
+        gap: 5px;
     }
 
     .remember-option label,
@@ -367,10 +436,21 @@ body {
     }
 }
 
-@media (max-height: 450px) {
+@media (max-height: 500px) {
     .login-container {
-        align-items: flex-start;
+        justify-content: flex-start;
     }
 }
 
+/* ========================================
+   14. ACESSIBILIDADE
+======================================== */
 
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}

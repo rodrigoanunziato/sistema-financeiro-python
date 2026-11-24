@@ -18,6 +18,9 @@ def create_app():
     from app.routes.painel.routes import painel
     app.register_blueprint(painel)
 
+    from datetime import timedelta
+    app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=1)
+
     criar_admin_padrao()
 
     return app

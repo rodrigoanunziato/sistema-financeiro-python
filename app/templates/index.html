@@ -20,11 +20,20 @@
         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
     >
 
+    <!-- Cores dinâmicas do sistema -->
+    <style>
+    :root {
+        --cor-primaria: {{ config['COR_PRIMARIA'] }};
+        --cor-secundaria: {{ config['COR_SECUNDARIA'] }};
+    }
+    </style>
+
     <!-- CSS personalizado -->
     <link
         rel="stylesheet"
         href="{{ url_for('static', filename='css/login.css') }}"
     >
+
 </head>
 
 <body>
@@ -37,10 +46,11 @@
             <header class="login-header">
 
                 <div class="logo">
-                    <i class="bi bi-bank"></i>
+                    <img
+                        src="{{ url_for('static', filename='img/logo.webp') }}"
+                        alt="Sistema Financeiro"
+                    >
                 </div>
-
-                <h1>Sistema Financeiro</h1>          
 
             </header>
 
@@ -68,12 +78,14 @@
                     {% endif %}
                 {% endwith %}
 
-                <form action="/login" method="POST">
+                <!-- Formulário -->
+                <form action="/login" method="POST" id="formLogin">
 
                     <!-- E-mail -->
                     <div class="form-group">
+
                         <label for="email" class="form-label">
-                            <i class="bi bi-person me-2"></i>
+                            <i class="bi bi-person"></i>
                             E-mail
                         </label>
 
@@ -86,14 +98,16 @@
                             autocomplete="email"
                             required
                             autofocus
+                            value="{% if modo_teste == 'Sim' %}{{ email_padrao }}{% endif %}"
                         >
+
                     </div>
 
                     <!-- Senha -->
                     <div class="form-group password-group">
 
                         <label for="senha" class="form-label">
-                            <i class="bi bi-lock me-2"></i>
+                            <i class="bi bi-lock"></i>
                             Senha
                         </label>
 
@@ -107,6 +121,7 @@
                                 placeholder="Digite sua senha"
                                 autocomplete="current-password"
                                 required
+                                value="{% if modo_teste == 'Sim' %}{{ senha_padrao }}{% endif %}"
                             >
 
                             <button
@@ -120,22 +135,25 @@
                             </button>
 
                         </div>
+
                     </div>
 
-                    <!-- Lembrar-me e esqueci minha senha -->
+                    <!-- Opções -->
                     <div class="login-options">
 
                         <div class="remember-option">
+
                             <input
                                 type="checkbox"
-                                id="lembrar-me"
-                                name="lembrar-me"
+                                id="lembrar"
+                                name="lembrar"
                                 class="remember-checkbox"
                             >
 
-                            <label for="lembrar-me">
+                            <label for="lembrar">
                                 Lembrar-me
                             </label>
+
                         </div>
 
                         <a href="#" class="forgot-password">
@@ -147,10 +165,27 @@
                     <!-- Botão Entrar -->
                     <button
                         type="submit"
-                        class="btn btn-login w-100"
+                        class="btn-login"
+                        id="btnLogin"
                     >
-                        <i class="bi bi-box-arrow-in-right me-2"></i>
-                        Entrar
+
+                        <span class="button-content">
+                            <i class="bi bi-box-arrow-in-right"></i>
+                            Entrar
+                        </span>
+
+                        <span class="button-loading">
+
+                            <span
+                                class="spinner-border spinner-border-sm"
+                                role="status"
+                                aria-hidden="true"
+                            ></span>
+
+                            Autenticando...
+
+                        </span>
+
                     </button>
 
                 </form>
@@ -159,13 +194,23 @@
 
         </section>
 
+        <!-- Identificação do sistema -->
+        <div class="system-version">
+            Sistema Financeiro
+        </div>
+
     </main>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Mostrar e ocultar senha -->
+    <!-- Funcionalidades do login -->
     <script>
+
+        // ========================================
+        // MOSTRAR E OCULTAR SENHA
+        // ========================================
+
         const campoSenha = document.getElementById('senha');
         const botaoSenha = document.getElementById('toggleSenha');
         const iconeSenha = botaoSenha.querySelector('i');
@@ -189,10 +234,127 @@
                 String(mostrar)
             );
 
+            campoSenha.focus();
+
         });
+
+
+        // ========================================
+        // ESTADO DE CARREGAMENTO DO BOTÃO
+        // ========================================
+
+        const formLogin = document.getElementById('formLogin');
+        const btnLogin = document.getElementById('btnLogin');
+
+        formLogin.addEventListener('submit', function (event) {
+
+            if (!formLogin.checkValidity()) {
+                return;
+            }
+
+            btnLogin.classList.add('loading');
+            btnLogin.disabled = true;
+
+        });
+
+
+        // ========================================
+        // VALIDAÇÃO PERSONALIZADA EM PORTUGUÊS
+        // ========================================
+
+        const campos = document.querySelectorAll(
+            '#formLogin input'
+        );
+
+        campos.forEach(campo => {
+
+            function validarCampo() {
+
+                campo.setCustomValidity('');
+
+                if (campo.validity.valueMissing) {
+
+                    campo.setCustomValidity(
+                        'Por favor, preencha este campo.'
+                    );
+
+                }
+
+                else if (
+                    campo.validity.typeMismatch &&
+                    campo.type === 'email'
+                ) {
+
+                    const valor = campo.value.trim();
+
+                    if (!valor.includes('@')) {
+
+                        campo.setCustomValidity(
+                            'Por favor, inclua um "@" no endereço de e-mail.'
+                        );
+
+                    } else {
+
+                        campo.setCustomValidity(
+                            'Por favor, informe um endereço de e-mail válido.'
+                        );
+
+                    }
+
+                }
+
+                else if (campo.validity.tooShort) {
+
+                    campo.setCustomValidity(
+                        'O valor informado é muito curto.'
+                    );
+
+                }
+
+                else if (campo.validity.tooLong) {
+
+                    campo.setCustomValidity(
+                        'O valor informado é muito longo.'
+                    );
+
+                }
+
+                else if (campo.validity.patternMismatch) {
+
+                    campo.setCustomValidity(
+                        'O formato informado é inválido.'
+                    );
+
+                }
+
+            }
+
+
+            // Validação ao enviar
+            campo.addEventListener('invalid', validarCampo);
+
+
+            // Limpa a mensagem ao digitar
+            campo.addEventListener('input', function () {
+
+                campo.setCustomValidity('');
+
+            });
+
+
+            // Validação ao sair do campo
+            campo.addEventListener('blur', function () {
+
+                if (campo.value !== '') {
+                    validarCampo();
+                }
+
+            });
+
+        });
+
     </script>
 
 </body>
-</html>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</html>
