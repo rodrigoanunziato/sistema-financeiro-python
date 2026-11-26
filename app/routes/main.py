@@ -39,14 +39,17 @@ def login():
     cursor.close()
     conexao.close()
 
-    if usuario['ativo'] != 'Sim':
-        flash('Usuário inativo, contate o Administrador!', 'danger')
-        return redirect(url_for('main.index'))
+    if usuario and usuario['ativo'] != 'Sim':
+            flash('Usuário inativo, contate o Administrador!', 'danger')
+            return redirect(url_for('main.index'))
+
 
     if usuario and bcrypt.check_password_hash(usuario['senha'], senha):
         session['usuario_id'] = usuario['id']
         session['usuario_nome'] = usuario['nome']
         session['usuario_nivel'] = usuario['nivel']
+        session['usuario_foto'] = usuario['foto']
+
 
         return redirect(url_for('painel.index'))
     flash('Email ou senha incorretos!', 'danger')

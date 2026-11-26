@@ -1,0 +1,613 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}Sistema Financeiro{% endblock %}</title>
+
+    <link rel="icon" type="image/webp"
+          href="{{ url_for('static', filename='img/icone.webp') }}">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+          rel="stylesheet">
+
+    <!-- CSS do painel -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/painel.css') }}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body style="--cor-primaria: {{ config.get('COR_PRIMARIA', '#0755aa') }};
+             --cor-secundaria: {{ config.get('COR_SECUNDARIA', '#064582') }};">
+
+    {% set foto_usuario = session.get('usuario_foto', 'sem_foto.webp') %}
+
+    <!-- ==================================================
+         NAVBAR SUPERIOR
+    =================================================== -->
+
+    <header class="topbar">
+
+        <div class="topbar-left">
+
+            <button type="button"
+                    class="sidebar-toggle"
+                    id="sidebarToggle"
+                    aria-label="Abrir menu"
+                    aria-controls="sidebar"
+                    aria-expanded="true">
+                <i class="bi bi-list"></i>
+            </button>
+
+            <a class="brand-system" href="{{ url_for('painel.index') }}">
+                <span class="brand-icon">
+                    <img src="{{ url_for('static', filename='img/icone.webp') }}"
+                         alt="Logo do sistema">
+                </span>
+
+                <span class="brand-name">
+                    Sistema <strong>Financeiro</strong>
+                </span>
+            </a>
+
+        </div>
+
+        <!-- Usuário -->
+        <div class="topbar-right">
+
+            <div class="dropdown user-dropdown">
+
+                <button class="user-dropdown-toggle"
+                        type="button"
+                        id="userDropdown"
+                        data-bs-toggle="dropdown"
+                        data-bs-display="static"
+                        aria-expanded="false">
+
+                    <div class="user-details">
+
+                        <span class="user-name">
+                            {{ session.get('usuario_nome', 'Usuário') }}
+                        </span>
+
+                        <span class="user-level">
+                            {{ session.get('usuario_nivel', '') }}
+                        </span>
+
+                    </div>
+
+                    <!-- Foto do cabeçalho -->
+                    <span class="user-avatar-container">
+
+                        <img
+                            id="fotoPerfilAtual"
+                            class="user-avatar foto-perfil"
+                            src="{{ url_for('static', filename='img/usuarios/' ~ foto_usuario) if foto_usuario and foto_usuario != 'sem_foto.webp' else url_for('static', filename='img/sem_foto.webp') }}"
+                            alt="Foto do usuário"
+                            onerror="this.onerror=null; this.src='{{ url_for('static', filename='img/sem_foto.webp') }}';"
+                        >
+
+                    </span>
+
+                    <i class="bi bi-chevron-down user-chevron"></i>
+
+                </button>
+
+                <!-- Menu suspenso -->
+                <div class="dropdown-menu dropdown-menu-end user-dropdown-menu">
+
+                    <div class="dropdown-user-header">
+
+                        <strong class="nome-usuario">
+                            {{ session.get('usuario_nome', 'Usuário') }}
+                        </strong>
+
+                        <small>
+                            {{ session.get('usuario_nivel', '') }}
+                        </small>
+
+                    </div>
+
+                    <div class="dropdown-divider"></div>
+
+                    <button type="button"
+                            class="dropdown-item"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalEditarPerfil">
+
+                        <i class="bi bi-person-gear"></i>
+                        Editar perfil
+
+                    </button>
+
+                    <a href="#" class="dropdown-item">
+                        <i class="bi bi-gear"></i>
+                        Configurações
+                    </a>
+
+                    <div class="dropdown-divider"></div>
+
+                    <form action="{{ url_for('painel.logout') }}" method="POST">
+
+                        <button type="submit"
+                                class="dropdown-item logout-item">
+
+                            <i class="bi bi-box-arrow-right"></i>
+                            Sair do sistema
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- ==================================================
+         ESTRUTURA PRINCIPAL
+    =================================================== -->
+
+    <div class="main-layout">
+
+        <aside class="sidebar" id="sidebar">
+
+            <div class="sidebar-title">
+                Menu principal
+            </div>
+
+            <nav class="sidebar-nav">
+
+                <a href="{{ url_for('painel.index') }}"
+                   class="sidebar-link {% if request.endpoint == 'painel.index' %}active{% endif %}">
+
+                    <i class="bi bi-speedometer2"></i>
+                    <span>Dashboard</span>
+
+                </a>
+
+                <a href="#" class="sidebar-link">
+                    <i class="bi bi-people"></i>
+                    <span>Usuários</span>
+                </a>
+
+            </nav>
+
+        </aside>
+
+        <main class="page-content">
+
+            <div class="page-content-inner">
+                {% block content %}{% endblock %}
+            </div>
+
+        </main>
+
+    </div>
+
+
+    <!-- ==================================================
+         MODAL: EDITAR PERFIL
+    =================================================== -->
+
+    <div class="modal fade"
+         id="modalEditarPerfil"
+         tabindex="-1"
+         aria-labelledby="tituloEditarPerfil"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+
+            <div class="modal-content profile-modal">
+
+                <div class="modal-header profile-modal-header">
+
+                    <div>
+                        <h5 class="modal-title" id="tituloEditarPerfil">
+                            <i class="bi bi-person-gear me-2"></i>
+                            Editar perfil
+                        </h5>
+
+                        <p>Atualize suas informações pessoais e de contato.</p>
+                    </div>
+
+                    <button type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"
+                            aria-label="Fechar">
+                    </button>
+
+                </div>
+
+                <!-- Formulário de perfil -->
+                <form id="formPerfil"
+                      action="{{ url_for('painel.salvar_perfil') }}"
+                      method="POST"
+                      enctype="multipart/form-data">
+
+                    <div class="modal-body profile-modal-body">
+
+                        <!-- FOTO DO PERFIL -->
+                        <section class="profile-photo-section">
+
+                            <div class="profile-photo-preview">
+
+                                <img
+                                    src="{{ url_for('static', filename='img/usuarios/' ~ foto_usuario) if foto_usuario and foto_usuario != 'sem_foto.webp' else url_for('static', filename='img/sem_foto.webp') }}"
+                                    id="previewFotoPerfil"
+                                    class="foto-perfil"
+                                    alt="Pré-visualização da foto do usuário"
+                                    onerror="this.onerror=null; this.src='{{ url_for('static', filename='img/sem_foto.webp') }}';"
+                                >
+
+                            </div>
+
+                            <div class="profile-photo-info">
+
+                                <label for="fotoPerfil">Foto do perfil</label>
+
+                                <p>
+                                    Selecione uma imagem JPG, PNG ou WEBP.
+                                    Tamanho máximo de 2 MB.
+                                </p>
+
+                                <input
+                                    type="file"
+                                    class="form-control"
+                                    id="fotoPerfil"
+                                    name="foto"
+                                    accept=".jpg,.jpeg,.png,.webp"
+                                >
+
+                            </div>
+
+                        </section>
+
+
+                        <!-- DADOS PESSOAIS -->
+                        <section class="profile-section">
+
+                            <div class="profile-section-title">
+                                <i class="bi bi-person"></i>
+                                Dados pessoais
+                            </div>
+
+                            <div class="row g-3">
+
+                                <div class="col-md-6">
+
+                                    <label class="form-label" for="nomePerfil">
+                                        Nome completo
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="nomePerfil"
+                                        name="nome"
+                                        maxlength="100"
+                                        value="{{ usuario.nome or session.get('usuario_nome', '') }}"
+                                        placeholder="Digite seu nome"
+                                        required
+                                    >
+
+                                </div>
+
+                                <div class="col-md-6">
+
+                                    <label class="form-label" for="cpfPerfil">
+                                        CPF
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="cpfPerfil"
+                                        name="cpf"
+                                        data-mask="cpf"
+                                        maxlength="14"
+                                        value="{{ usuario.cpf or '' }}"
+                                        placeholder="000.000.000-00"
+                                    >
+
+                                </div>
+
+                            </div>
+
+                        </section>
+
+
+                        <!-- CONTATO -->
+                        <section class="profile-section">
+
+                            <div class="profile-section-title">
+                                <i class="bi bi-telephone"></i>
+                                Informações de contato
+                            </div>
+
+                            <div class="row g-3">
+
+                                <div class="col-md-6">
+
+                                    <label class="form-label" for="emailPerfil">
+                                        E-mail
+                                    </label>
+
+                                    <input
+                                        type="email"
+                                        class="form-control"
+                                        id="emailPerfil"
+                                        name="email"
+                                        maxlength="100"
+                                        value="{{ usuario.email or '' }}"
+                                        placeholder="Digite seu e-mail"
+                                        required
+                                    >
+
+                                </div>
+
+                                <div class="col-md-6">
+
+                                    <label class="form-label" for="telefonePerfil">
+                                        Telefone
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="telefonePerfil"
+                                        name="telefone"
+                                        data-mask="telefone"
+                                        maxlength="20"
+                                        value="{{ usuario.telefone or '' }}"
+                                        placeholder="(00) 00000-0000"
+                                    >
+
+                                </div>
+
+                            </div>
+
+                        </section>
+
+
+                        <!-- ENDEREÇO -->
+                        <section class="profile-section">
+
+                            <div class="profile-section-title">
+                                <i class="bi bi-geo-alt"></i>
+                                Endereço
+                            </div>
+
+                            <div class="row g-3">
+
+                                <div class="col-md-4">
+
+                                    <label class="form-label" for="cep">
+                                        CEP
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="cep"
+                                        name="cep"
+                                        data-mask="cep"
+                                        maxlength="10"
+                                        value="{{ usuario.cep or '' }}"
+                                        placeholder="00000-000"
+                                    >
+
+                                </div>
+
+                                <div class="col-md-8">
+
+                                    <label class="form-label" for="rua">
+                                        Endereço
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="rua"
+                                        name="endereco"
+                                        maxlength="200"
+                                        value="{{ usuario.endereco or '' }}"
+                                        placeholder="Rua, avenida..."
+                                    >
+
+                                </div>
+
+                                <div class="col-md-3">
+
+                                    <label class="form-label" for="numeroPerfil">
+                                        Número
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="numeroPerfil"
+                                        name="numero"
+                                        maxlength="10"
+                                        value="{{ usuario.numero or '' }}"
+                                        placeholder="Número"
+                                    >
+
+                                </div>
+
+                                <div class="col-md-5">
+
+                                    <label class="form-label" for="complementoPerfil">
+                                        Complemento
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="complementoPerfil"
+                                        name="complemento"
+                                        maxlength="100"
+                                        value="{{ usuario.complemento or '' }}"
+                                        placeholder="Apartamento, sala..."
+                                    >
+
+                                </div>
+
+                                <div class="col-md-4">
+
+                                    <label class="form-label" for="bairro">
+                                        Bairro
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="bairro"
+                                        name="bairro"
+                                        maxlength="100"
+                                        value="{{ usuario.bairro or '' }}"
+                                        placeholder="Bairro"
+                                    >
+
+                                </div>
+
+                                <div class="col-md-8">
+
+                                    <label class="form-label" for="cidade">
+                                        Cidade
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="cidade"
+                                        name="cidade"
+                                        maxlength="100"
+                                        value="{{ usuario.cidade or '' }}"
+                                        placeholder="Cidade"
+                                    >
+
+                                </div>
+
+                                <div class="col-md-4">
+
+                                    <label class="form-label" for="estado">
+                                        Estado
+                                    </label>
+
+                                    <select
+                                        class="form-select"
+                                        id="estado"
+                                        name="estado"
+                                    >
+
+                                        <option value="">Selecione o estado</option>
+
+                                        {% set estados = [
+                                            ('AC', 'Acre'),
+                                            ('AL', 'Alagoas'),
+                                            ('AP', 'Amapá'),
+                                            ('AM', 'Amazonas'),
+                                            ('BA', 'Bahia'),
+                                            ('CE', 'Ceará'),
+                                            ('DF', 'Distrito Federal'),
+                                            ('ES', 'Espírito Santo'),
+                                            ('GO', 'Goiás'),
+                                            ('MA', 'Maranhão'),
+                                            ('MT', 'Mato Grosso'),
+                                            ('MS', 'Mato Grosso do Sul'),
+                                            ('MG', 'Minas Gerais'),
+                                            ('PA', 'Pará'),
+                                            ('PB', 'Paraíba'),
+                                            ('PR', 'Paraná'),
+                                            ('PE', 'Pernambuco'),
+                                            ('PI', 'Piauí'),
+                                            ('RJ', 'Rio de Janeiro'),
+                                            ('RN', 'Rio Grande do Norte'),
+                                            ('RS', 'Rio Grande do Sul'),
+                                            ('RO', 'Rondônia'),
+                                            ('RR', 'Roraima'),
+                                            ('SC', 'Santa Catarina'),
+                                            ('SP', 'São Paulo'),
+                                            ('SE', 'Sergipe'),
+                                            ('TO', 'Tocantins')
+                                        ] %}
+
+                                        {% for sigla, nome_estado in estados %}
+                                            <option
+                                                value="{{ sigla }}"
+                                                {% if usuario_perfil and usuario_perfil.get('estado') == sigla %}selected{% endif %}
+                                            >
+                                                {{ nome_estado }}
+                                            </option>
+                                        {% endfor %}
+
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+                        </section>
+
+                    </div>
+
+
+                    <!-- RODAPÉ DO MODAL -->
+                    <div class="modal-footer profile-modal-footer">
+
+                        <button type="button"
+                                class="btn btn-cancelar"
+                                data-bs-dismiss="modal">
+                            Cancelar
+                        </button>
+
+                        <button type="submit"
+                                class="btn btn-salvar-perfil"
+                                id="btnSalvarPerfil">
+
+                            <span class="save-button-content">
+                                <i class="bi bi-check-lg me-1"></i>
+                                Salvar alterações
+                            </span>
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         SCRIPTS: CADA ARQUIVO CARREGADO UMA ÚNICA VEZ
+    =================================================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/mascaras.js') }}"></script>
+
+    {% block extra_js %}{% endblock %}
+
+</body>
+</html>

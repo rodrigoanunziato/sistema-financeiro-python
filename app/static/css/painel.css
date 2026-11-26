@@ -1,0 +1,1333 @@
+
+/* ========================================
+   1. VARIÁVEIS E CONFIGURAÇÕES GERAIS
+======================================== */
+
+:root {
+    --cor-primaria: #0F2A4A;
+    --cor-secundaria: #064582;
+
+    --texto: #064582;
+    --texto-secundario: #667085;
+
+    --fundo: #f5f7fb;
+    --branco: #ffffff;
+    --borda: #e4e7ec;
+
+    --sombra-navbar: 0 2px 10px rgba(16, 24, 40, 0.08);
+    --transicao: 0.2s ease;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    min-height: 100%;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--texto);
+    background: var(--fundo);
+    font-size: 15px;
+}
+
+a {
+    text-decoration: none;
+}
+
+
+/* ========================================
+   2. BARRA SUPERIOR
+======================================== */
+
+.topbar {
+    position: relative;
+    z-index: 10;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    width: 100%;
+    min-height: 76px;
+    padding: 10px 24px;
+
+    background-color: var(--cor-primaria);
+    box-shadow: var(--sombra-navbar);
+}
+
+.topbar-left,
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.topbar-right {
+    margin-left: auto;
+    min-width: 0;
+}
+
+
+/* ========================================
+   3. BOTÃO DO MENU LATERAL
+======================================== */
+
+.sidebar-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: 40px;
+    height: 40px;
+
+    border: none;
+    border-radius: 7px;
+
+    color: var(--branco);
+    background: rgba(255, 255, 255, 0.12);
+
+    font-size: 25px;
+    cursor: pointer;
+
+    transition: background-color var(--transicao);
+}
+
+.sidebar-toggle:hover {
+    background: rgba(255, 255, 255, 0.23);
+}
+
+.sidebar-toggle:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 3px;
+}
+
+.sidebar-toggle i {
+    transition: transform 0.25s ease;
+}
+
+body.sidebar-open .sidebar-toggle i,
+body.sidebar-collapsed .sidebar-toggle i {
+    transform: rotate(90deg);
+}
+
+
+/* ========================================
+   4. LOGO E NOME DO SISTEMA
+======================================== */
+
+.brand-system {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+
+    min-width: 0;
+    color: var(--branco);
+
+    transition: opacity var(--transicao);
+}
+
+.brand-system:hover {
+    color: var(--branco);
+    opacity: 0.9;
+}
+
+.brand-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: 56px;
+    height: 56px;
+    padding: 3px;
+
+    background-color: var(--branco);
+    border-radius: 12px;
+
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.18);
+}
+
+.brand-icon img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.brand-name {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
+.brand-name strong {
+    font-weight: 700;
+}
+
+
+/* ========================================
+   5. ÁREA DO USUÁRIO
+======================================== */
+
+.user-dropdown {
+    position: relative;
+}
+
+.user-dropdown-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 11px;
+
+    padding: 5px 8px;
+
+    color: var(--branco);
+    background: transparent;
+
+    border: none;
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    transition: background-color var(--transicao);
+}
+
+.user-dropdown-toggle:hover,
+.user-dropdown-toggle[aria-expanded="true"] {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.user-dropdown-toggle:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 3px;
+}
+
+/* Nome e nível */
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.user-name {
+    max-width: 190px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    color: var(--branco);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.user-level {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 12px;
+}
+
+/* Foto circular */
+
+.user-avatar-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: 45px;
+    height: 45px;
+
+    overflow: hidden;
+
+    background: var(--branco);
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+}
+
+.user-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* Seta do pop-up */
+
+.user-chevron {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 12px;
+
+    transition: transform var(--transicao);
+}
+
+.user-dropdown-toggle[aria-expanded="true"] .user-chevron {
+    transform: rotate(180deg);
+}
+
+
+/* ========================================
+   6. MENU SUSPENSO DO USUÁRIO
+======================================== */
+
+.user-dropdown-menu {
+    position: absolute !important;
+
+    top: calc(100% + 8px) !important;
+    right: 0 !important;
+    left: auto !important;
+
+    width: 255px;
+    min-width: 220px;
+    max-width: calc(100vw - 20px);
+
+    margin: 0 !important;
+    padding: 9px;
+
+    background: var(--branco);
+    border: 1px solid var(--borda);
+    border-radius: 10px;
+
+    box-shadow: 0 8px 30px rgba(16, 24, 40, 0.15);
+
+    z-index: 1055;
+
+    opacity: 0;
+    transform: translateY(-8px) scale(0.97);
+    transform-origin: top right;
+
+    transition:
+        opacity 0.18s ease,
+        transform 0.18s ease;
+}
+
+/* Animação de abertura */
+
+.user-dropdown-menu.show {
+    animation: dropdownEntrada 0.2s ease both;
+}
+
+@keyframes dropdownEntrada {
+    from {
+        opacity: 0;
+        transform: translateY(-8px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Animação de fechamento */
+
+.user-dropdown-menu.is-closing {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.97);
+    pointer-events: none;
+}
+
+/* Identificação do usuário */
+
+.dropdown-user-header {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    padding: 12px;
+}
+
+.dropdown-user-header strong {
+    color: var(--texto);
+    font-size: 14px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.dropdown-user-header small {
+    color: var(--texto-secundario);
+    font-size: 12px;
+}
+
+/* Opções do menu */
+
+.user-dropdown-menu .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+
+    width: 100%;
+    min-height: 43px;
+    padding: 10px 12px;
+
+    color: var(--texto);
+    background: transparent;
+
+    border: none;
+    border-radius: 6px;
+
+    font-family: inherit;
+    font-size: 14px;
+    text-align: left;
+
+    transition:
+        color var(--transicao),
+        background-color var(--transicao);
+}
+
+.user-dropdown-menu .dropdown-item i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: 20px;
+
+    color: var(--cor-primaria);
+    font-size: 17px;
+}
+
+.user-dropdown-menu .dropdown-item:hover {
+    color: var(--cor-primaria);
+    background-color: rgba(7, 85, 170, 0.08);
+}
+
+/* Separadores */
+
+.user-dropdown-menu .dropdown-divider {
+    margin: 7px 0;
+    border-color: var(--borda);
+}
+
+/* Logout */
+
+.user-dropdown-menu form {
+    width: 100%;
+    margin: 0;
+}
+
+.user-dropdown-menu .logout-item {
+    width: 100%;
+    color: #dc3545;
+    cursor: pointer;
+}
+
+.user-dropdown-menu .logout-item i {
+    color: #dc3545;
+}
+
+.user-dropdown-menu .logout-item:hover {
+    color: #bb2d3b;
+    background-color: rgba(220, 53, 69, 0.08);
+}
+
+
+/* ========================================
+   7. ESTRUTURA PRINCIPAL
+======================================== */
+
+.main-layout {
+    display: flex;
+    align-items: stretch;
+
+    min-height: calc(100vh - 76px);
+}
+
+
+/* ========================================
+   8. MENU LATERAL
+======================================== */
+
+.sidebar {
+    display: block;
+    flex: 0 0 265px;
+
+    width: 265px;
+    min-width: 0;
+
+    padding: 28px 16px;
+
+    overflow: hidden;
+
+    background-color: var(--branco);
+    border-right: 1px solid var(--borda);
+
+    transform: translateX(0);
+
+    transition:
+        flex-basis 0.3s ease,
+        width 0.3s ease,
+        padding 0.3s ease,
+        transform 0.3s ease,
+        border-color 0.3s ease;
+}
+
+/* Título */
+
+.sidebar-title {
+    margin: 0 12px 20px;
+
+    color: var(--texto-secundario);
+    font-size: 13px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Navegação */
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* Links */
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    min-height: 47px;
+    padding: 12px 14px;
+
+    color: #475467;
+    background-color: transparent;
+
+    border-radius: 8px;
+
+    font-size: 15px;
+    font-weight: 500;
+
+    transition:
+        color var(--transicao),
+        background-color var(--transicao),
+        transform var(--transicao);
+}
+
+.sidebar-link i {
+    flex-shrink: 0;
+
+    color: var(--cor-primaria);
+    font-size: 19px;
+}
+
+/* Hover */
+
+.sidebar-link:hover {
+    color: var(--cor-primaria);
+
+    background-color: color-mix(
+        in srgb,
+        var(--cor-primaria) 7%,
+        white
+    );
+
+    transform: translateX(3px);
+}
+
+/* Item selecionado */
+
+.sidebar-link.active {
+    color: var(--cor-primaria);
+
+    background-color: color-mix(
+        in srgb,
+        var(--cor-primaria) 10%,
+        white
+    );
+
+    font-weight: 700;
+}
+
+.sidebar-link.active i {
+    color: var(--cor-primaria);
+}
+
+
+/* ========================================
+   9. RECOLHIMENTO DO MENU - DESKTOP
+======================================== */
+
+body.sidebar-collapsed .sidebar {
+    flex: 0 0 0;
+
+    width: 0;
+    min-width: 0;
+
+    padding-left: 0;
+    padding-right: 0;
+
+    border-right-width: 0;
+
+    transform: translateX(-8px);
+
+    pointer-events: none;
+}
+
+body:not(.sidebar-collapsed) .sidebar {
+    pointer-events: auto;
+}
+
+
+/* ========================================
+   10. ANIMAÇÃO DOS ITENS DO MENU
+======================================== */
+
+@keyframes menuItemEntrada {
+    from {
+        transform: translateX(-8px);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+body.sidebar-open .sidebar-link {
+    animation: menuItemEntrada 0.25s ease both;
+}
+
+body.sidebar-open .sidebar-link:nth-child(1) {
+    animation-delay: 0.04s;
+}
+
+body.sidebar-open .sidebar-link:nth-child(2) {
+    animation-delay: 0.09s;
+}
+
+body.sidebar-open .sidebar-link:nth-child(3) {
+    animation-delay: 0.14s;
+}
+
+
+/* ========================================
+   11. ÁREA DE CONTEÚDO
+======================================== */
+
+.page-content {
+    flex: 1;
+    min-width: 0;
+
+    padding: 35px;
+
+    background-color: var(--fundo);
+}
+
+.page-content-inner {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+
+/* ========================================
+   12. TÍTULOS E CONTEÚDOS
+======================================== */
+
+.page-content h1 {
+    margin: 0 0 15px;
+
+    color: var(--texto);
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.page-content h2 {
+    color: var(--texto);
+    font-size: 27px;
+    font-weight: 700;
+}
+
+.page-content h3 {
+    color: var(--texto);
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.page-content p {
+    color: var(--texto-secundario);
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+
+/* ========================================
+   13. MODAL DE EDIÇÃO DO PERFIL
+======================================== */
+
+/* Estrutura */
+
+#modalEditarPerfil .modal-dialog {
+    width: 95%;
+    max-width: 760px;
+    margin: 16px auto;
+}
+
+.profile-modal {
+    display: flex;
+    flex-direction: column;
+
+    max-height: calc(100vh - 32px);
+    max-height: calc(100dvh - 32px);
+
+    overflow: hidden;
+
+    border: none;
+    border-radius: 12px;
+
+    box-shadow: 0 15px 45px rgba(16, 24, 40, 0.18);
+}
+
+/* Cabeçalho */
+
+.profile-modal-header {
+    flex-shrink: 0;
+
+    padding: 16px 22px;
+
+    color: var(--branco);
+    background-color: var(--cor-primaria);
+
+    border-bottom: none;
+}
+
+.profile-modal-header .modal-title {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.profile-modal-header p {
+    margin: 5px 0 0;
+
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 12px;
+}
+
+/* Corpo com rolagem */
+
+.profile-modal-body {
+    flex: 1 1 auto;
+    min-height: 0;
+
+    max-height: calc(100vh - 190px);
+
+    padding: 18px 22px;
+
+    overflow-y: auto;
+    overscroll-behavior: contain;
+
+    background-color: var(--branco);
+
+    scrollbar-width: thin;
+    scrollbar-color: #aab5c3 #f1f3f6;
+}
+
+/* Barra de rolagem */
+
+.profile-modal-body::-webkit-scrollbar {
+    width: 7px;
+}
+
+.profile-modal-body::-webkit-scrollbar-track {
+    background: #f1f3f6;
+    border-radius: 10px;
+}
+
+.profile-modal-body::-webkit-scrollbar-thumb {
+    background: #aab5c3;
+    border-radius: 10px;
+}
+
+.profile-modal-body::-webkit-scrollbar-thumb:hover {
+    background: var(--cor-secundaria);
+}
+
+
+/* ========================================
+   14. FOTO DO PERFIL NA MODAL
+======================================== */
+
+.profile-photo-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    padding: 13px;
+    margin-bottom: 20px;
+
+    background-color: #f7f9fc;
+    border: 1px solid var(--borda);
+    border-radius: 10px;
+}
+
+.profile-photo-preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: 75px;
+    height: 75px;
+
+    overflow: hidden;
+
+    background-color: var(--branco);
+    border: 3px solid var(--borda);
+    border-radius: 50%;
+}
+
+.profile-photo-preview img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.profile-photo-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.profile-photo-info label {
+    display: block;
+    margin-bottom: 6px;
+
+    color: var(--texto);
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.profile-photo-info p {
+    margin-bottom: 10px;
+
+    color: var(--texto-secundario);
+    font-size: 12px;
+}
+
+
+/* ========================================
+   15. SEÇÕES DO FORMULÁRIO
+======================================== */
+
+.profile-section {
+    margin-bottom: 20px;
+}
+
+.profile-section:last-child {
+    margin-bottom: 0;
+}
+
+.profile-section-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+
+    color: var(--cor-primaria);
+    border-bottom: 1px solid var(--borda);
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.profile-section-title i {
+    font-size: 18px;
+}
+
+
+/* ========================================
+   16. CAMPOS DA MODAL
+======================================== */
+
+.profile-modal .form-label {
+    display: block;
+    margin-bottom: 5px;
+
+    color: var(--texto);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.profile-modal .form-control {
+    width: 100%;
+    min-height: 39px;
+
+    padding: 8px 11px;
+
+    color: var(--texto);
+    background-color: var(--branco);
+
+    border: 1px solid var(--borda);
+    border-radius: 7px;
+
+    font-family: inherit;
+    font-size: 12px;
+
+    transition:
+        border-color var(--transicao),
+        box-shadow var(--transicao);
+}
+
+.profile-modal .form-control:focus {
+    border-color: var(--cor-primaria);
+    outline: none;
+
+    box-shadow: 0 0 0 3px
+        color-mix(in srgb, var(--cor-primaria) 12%, transparent);
+}
+
+
+/* ========================================
+   17. RODAPÉ DA MODAL
+======================================== */
+
+.profile-modal-footer {
+    display: flex;
+    flex-shrink: 0;
+
+    justify-content: flex-end;
+    gap: 10px;
+
+    padding: 12px 22px;
+
+    background-color: #f8f9fb;
+    border-top: 1px solid var(--borda);
+}
+
+.profile-modal-footer .btn {
+    min-height: 37px;
+    padding: 8px 14px;
+
+    border-radius: 7px;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    transition:
+        background-color var(--transicao),
+        border-color var(--transicao),
+        color var(--transicao),
+        transform var(--transicao);
+}
+
+.profile-modal-footer .btn:active {
+    transform: scale(0.98);
+}
+
+/* Cancelar */
+
+.btn-cancelar {
+    color: #475467;
+    background-color: var(--branco);
+    border: 1px solid var(--borda);
+}
+
+.btn-cancelar:hover {
+    color: var(--texto);
+    background-color: #eef1f5;
+    border-color: #d0d5dd;
+}
+
+
+/* ========================================
+   18. BOTÃO SALVAR ALTERAÇÕES
+======================================== */
+
+.btn-salvar-perfil,
+.btn-salvar-perfil:disabled {
+    color: #ffffff !important;
+
+    background-color: var(--cor-primaria) !important;
+
+    border: 1px solid var(--cor-primaria) !important;
+
+    opacity: 1 !important;
+
+    /* Permite detectar o hover mesmo desabilitado */
+    pointer-events: auto !important;
+
+    cursor: not-allowed;
+
+    transition:
+        background-color var(--transicao),
+        border-color var(--transicao),
+        color var(--transicao);
+}
+
+/* Tom mais escuro ao passar o mouse */
+
+.btn-salvar-perfil:hover,
+.btn-salvar-perfil:disabled:hover {
+    color: #ffffff !important;
+
+    background-color: var(--cor-secundaria) !important;
+    border-color: var(--cor-secundaria) !important;
+}
+
+
+/* ========================================
+   19. RESPONSIVIDADE - TABLETS E CELULARES
+======================================== */
+
+@media (max-width: 767px) {
+
+    /* Cabeçalho */
+
+    .topbar {
+        min-height: 65px;
+        padding: 8px 12px;
+        gap: 8px;
+    }
+
+    .topbar-left,
+    .topbar-right {
+        gap: 8px;
+    }
+
+    .sidebar-toggle {
+        width: 37px;
+        height: 37px;
+        font-size: 23px;
+    }
+
+    .brand-system {
+        gap: 7px;
+    }
+
+    .brand-icon {
+        width: 40px;
+        height: 40px;
+        padding: 3px;
+        border-radius: 9px;
+    }
+
+    .brand-name {
+        font-size: 14px;
+    }
+
+    /* Usuário */
+
+    .user-dropdown-toggle {
+        gap: 7px;
+        padding: 4px;
+    }
+
+    .user-name {
+        max-width: 105px;
+        font-size: 12px;
+    }
+
+    .user-level {
+        font-size: 10px;
+    }
+
+    .user-avatar-container {
+        width: 38px;
+        height: 38px;
+    }
+
+    .user-chevron {
+        font-size: 10px;
+    }
+
+    /* Pop-up */
+
+    .user-dropdown-menu {
+        width: 240px;
+        min-width: 220px;
+        max-width: calc(100vw - 16px);
+    }
+
+    .dropdown-user-header strong {
+        font-size: 13px;
+    }
+
+    .user-dropdown-menu .dropdown-item {
+        min-height: 44px;
+        font-size: 13px;
+    }
+
+    /* Estrutura */
+
+    .main-layout {
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100vh - 65px);
+    }
+
+    /* Menu lateral recolhido */
+
+    .sidebar {
+        display: block;
+        flex: none;
+
+        width: 100%;
+        max-height: 0;
+
+        padding: 0 14px;
+
+        overflow: hidden;
+
+        background-color: var(--branco);
+
+        border-right: none;
+        border-bottom: none;
+
+        transform: translateY(-8px);
+
+        transition:
+            max-height 0.3s ease,
+            padding 0.3s ease,
+            transform 0.25s ease,
+            border-color 0.3s ease;
+    }
+
+    /* Menu lateral expandido */
+
+    body.sidebar-open .sidebar {
+        max-height: 500px;
+        padding: 17px 14px;
+
+        transform: translateY(0);
+
+        border-bottom: 1px solid var(--borda);
+
+        pointer-events: auto;
+    }
+
+    body:not(.sidebar-open) .sidebar {
+        pointer-events: none;
+    }
+
+    .sidebar-title {
+        display: block;
+
+        margin: 0 12px 12px;
+
+        font-size: 11px;
+    }
+
+    .sidebar-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .sidebar-link {
+        width: 100%;
+        min-height: 42px;
+
+        padding: 10px 12px;
+
+        font-size: 14px;
+    }
+
+    /* Itens do menu */
+
+    body.sidebar-open .sidebar-link {
+        animation: menuItemEntrada 0.25s ease both;
+    }
+
+    body.sidebar-open .sidebar-link:nth-child(1) {
+        animation-delay: 0.04s;
+    }
+
+    body.sidebar-open .sidebar-link:nth-child(2) {
+        animation-delay: 0.09s;
+    }
+
+    body.sidebar-open .sidebar-link:nth-child(3) {
+        animation-delay: 0.14s;
+    }
+
+    /* Conteúdo */
+
+    .page-content {
+        width: 100%;
+        padding: 23px 17px;
+    }
+
+    .page-content h1 {
+        font-size: 28px;
+    }
+
+    /* Modal */
+
+    #modalEditarPerfil .modal-dialog {
+        width: auto;
+        max-width: none;
+        margin: 10px;
+    }
+
+    .profile-modal {
+        max-height: calc(100dvh - 20px);
+    }
+
+    .profile-modal-header {
+        padding: 14px 17px;
+    }
+
+    .profile-modal-header .modal-title {
+        font-size: 18px;
+    }
+
+    .profile-modal-body {
+        max-height: calc(100dvh - 165px);
+        padding: 15px 17px;
+    }
+
+    .profile-photo-preview {
+        width: 65px;
+        height: 65px;
+    }
+
+    .profile-section {
+        margin-bottom: 18px;
+    }
+
+    .profile-modal-footer {
+        padding: 12px 17px;
+    }
+
+}
+
+
+/* ========================================
+   20. RESPONSIVIDADE - CELULARES PEQUENOS
+======================================== */
+
+@media (max-width: 400px) {
+
+    .topbar {
+        padding: 7px 8px;
+        gap: 5px;
+    }
+
+    .topbar-left,
+    .topbar-right {
+        gap: 5px;
+    }
+
+    .sidebar-toggle {
+        width: 34px;
+        height: 34px;
+        font-size: 21px;
+    }
+
+    .brand-icon {
+        width: 35px;
+        height: 35px;
+    }
+
+    .brand-name {
+        font-size: 12px;
+    }
+
+    .user-name {
+        max-width: 85px;
+        font-size: 11px;
+    }
+
+    .user-level {
+        font-size: 9px;
+    }
+
+    .user-avatar-container {
+        width: 34px;
+        height: 34px;
+    }
+
+    .user-chevron {
+        display: none;
+    }
+
+    .user-dropdown-menu {
+        width: 230px;
+        max-width: calc(100vw - 16px);
+    }
+
+    .page-content {
+        padding: 19px 12px;
+    }
+
+    .page-content h1 {
+        font-size: 25px;
+    }
+
+    /* Modal */
+
+    #modalEditarPerfil .modal-dialog {
+        margin: 5px;
+    }
+
+    .profile-modal {
+        max-height: calc(100dvh - 10px);
+    }
+
+    .profile-modal-header {
+        padding: 12px 14px;
+    }
+
+    .profile-modal-body {
+        max-height: calc(100dvh - 150px);
+        padding: 13px;
+    }
+
+    .profile-photo-section {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .profile-photo-preview {
+        width: 85px;
+        height: 85px;
+    }
+
+    .profile-modal-footer {
+        flex-direction: column-reverse;
+        padding: 10px 13px;
+        gap: 7px;
+    }
+
+    .profile-modal-footer .btn {
+        width: 100%;
+    }
+
+}
+
+
+/* ========================================
+   21. ACESSIBILIDADE
+======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .sidebar,
+    .sidebar-link,
+    .sidebar-toggle,
+    .sidebar-toggle i,
+    .user-dropdown-toggle,
+    .user-chevron,
+    .user-dropdown-menu,
+    .profile-modal-footer .btn,
+    .profile-modal .form-control {
+        animation: none !important;
+        transition: none !important;
+    }
+
+}
